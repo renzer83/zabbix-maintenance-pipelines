@@ -1,0 +1,25 @@
+steps:
+- task: replacetokens@3
+  inputs:
+    rootDirectory: '$(System.DefaultWorkingDirectory)/_CI/drop/CI/config.ini'
+    targetFiles: '$(System.DefaultWorkingDirectory)/_CI/drop/CI/config.ini'
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'warn'
+    keepToken: false
+    tokenPrefix: '__@'
+    tokenSuffix: '@__'
+    useLegacyPattern: false
+    enableTransforms: false
+    enableTelemetry: true
+  displayName: 'Replace config.ini'
+
+- script: |
+    pip install pyzabbix==1.0.0
+  displayName: 'PIP instal ZABBIX'
+  
+- task: PythonScript@0
+  displayName: 'Run Python automationzabbix'
+  inputs:
+    scriptSource: 'filePath'
+    scriptPath: '$(System.DefaultWorkingDirectory)/_CI/drop/CI/automationzabbix.py'
